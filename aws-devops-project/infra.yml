@@ -3,17 +3,11 @@ Parameters:
   AppName:
     Type: String
     Default: aws-devops-project
-  VpcCidr:
-    Type: String
-    Default: 10.0.0.0/16
-  SubnetCidr:
-    Type: String
-    Default: 10.0.1.0/24
 Resources:
   VPC:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: !Ref VpcCidr
+      CidrBlock: 10.0.0.0/16
       EnableDnsSupport: true
       EnableDnsHostnames: true
       Tags: [{ Key: Name, Value: !Ref AppName }]
@@ -29,14 +23,23 @@ Resources:
       VpcId: !Ref VPC
       InternetGatewayId: !Ref InternetGateway
 
-  PublicSubnet:
+  PublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      CidrBlock: !Ref SubnetCidr
+      CidrBlock: 10.0.1.0/24
       MapPublicIpOnLaunch: true
       AvailabilityZone: !Select [0, !GetAZs '']
-      Tags: [{ Key: Name, Value: !Ref AppName }]
+      Tags: [{ Key: Name, Value: !Sub "${AppName}-subnet-1" }]
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Select [1, !GetAZs '']
+      Tags: [{ Key: Name, Value: !Sub "${AppName}-subnet-2" }]
 
   RouteTable:
     Type: AWS::EC2::RouteTable
@@ -51,10 +54,16 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
 
-  SubnetRouteTableAssociation:
+  SubnetRouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      SubnetId: !Ref PublicSubnet
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref RouteTable
+
+  SubnetRouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet2
       RouteTableId: !Ref RouteTable
 
   ECSSecurityGroup:
@@ -90,8 +99,7 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              Service:
-                - ecs-tasks.amazonaws.com
+              Service: [ecs-tasks.amazonaws.com]
             Action: sts:AssumeRole
       Policies:
         - PolicyName: ECSExecutionPolicy
@@ -112,7 +120,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       Name: !Sub "${AppName}-alb"
-      Subnets: [ !Ref PublicSubnet ]
+      Subnets: [ !Ref PublicSubnet1, !Ref PublicSubnet2 ]
       SecurityGroups: [ !Ref ECSSecurityGroup ]
       Scheme: internet-facing
       Type: application
@@ -125,6 +133,8 @@ Resources:
       Protocol: HTTP
       TargetType: ip
       HealthCheckPath: '/'
+      Matcher:
+        HttpCode: '200'
 
   Listener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -167,7 +177,8 @@ Resources:
         AwsvpcConfiguration:
           AssignPublicIp: ENABLED
           Subnets:
-            - !Ref PublicSubnet
+            - !Ref PublicSubnet1
+            - !Ref PublicSubnet2
           SecurityGroups:
             - !Ref ECSSecurityGroup
       LoadBalancers:
