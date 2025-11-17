@@ -1,51 +1,57 @@
-React + Vite App
-This folder contains a minimal setup for a React application built using Vite—optimized for fast dev experience and CI/CD automation.
+## 🚀 React + Vite Application
+A lightweight, fast, and scalable front-end setup powered by React and Vite, designed for quick development, optimized builds, and smooth CI/CD automation.
+Perfect for modern cloud-native deployments, including Docker-based workflows.
 
-Structure
-/public: Static assets
+## 📁 Project Structure
+1. /public: Static assets
+2. /src: Source code (React components)
+3. Dockerfile: Production build steps for containerization
+4. package.json, package-lock.json: Project metadata and dependencies
+5. vite.config.js: Vite build configuration
 
-/src: Source code (React components)
-
-Dockerfile: Production build steps for containerization
-
-package.json, package-lock.json: Project metadata and dependencies
-
-vite.config.js: Vite build configuration
-
-Getting Started
-Install dependencies
+## ⚡ Getting Started
+## Install dependencies
 Make sure you have Node.js & npm installed. Then:
-
-text
+```bash
 npm install
-Run the development server
-text
+```
+## Run the development server
+```bash
 npm run dev
-Build a production bundle
-text
+```
+## Build a production bundle
+```bash
 npm run build
-Preview the production build locally
-text
+```
+## Preview the production build locally
+```bash
 npm run preview
-Main Dependencies
-React
-
-Vite
-
-ESLint (with custom config for linting)
-
-Docker
+```
+## 🧩 Main Dependencies
+1. React
+2. Vite
+3. ESLint (with custom config for linting)
+## 🐳 Docker Support
 Build the Docker image for the app:
-
-text
-docker build -t aws-devops-app .
+```bash
+docker build -t aws-devops-app
+```
 Run the container locally:
-
-text
+```bash
 docker run -p 80:80 aws-devops-app
-Notes:
+```
+## 🛠 CI/CD Ready
 
+This project is designed for automated workflows.
+Refer to the root infrastructure documentation for:
+
+Automated builds
+
+Deployment pipelines
+
+Environment configuration
+
+## 📘 Notes:
 For TypeScript setup, see Vite + React TS Template.
-
 Project is CI/CD-ready—see the root infrastructure documentation for automated build & deployment flow.
 
