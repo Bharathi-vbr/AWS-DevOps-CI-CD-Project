@@ -6,6 +6,8 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 619283292935.dkr.ecr.us-east-1.amazonaws.com
+      - echo Logging in to DockerHub...
+      - echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
       - REPOSITORY_URI=619283292935.dkr.ecr.us-east-1.amazonaws.com/aws-devops-project
       - TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)
   build:
@@ -21,8 +23,6 @@ phases:
       - docker push $REPOSITORY_URI:latest
       - echo Writing image definitions...
       - printf '[{"name":"aws-devops-project","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > imagedefinitions.json
-
-
 
 artifacts:
   files:
