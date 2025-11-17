@@ -20,7 +20,8 @@ phases:
       - docker push $REPOSITORY_URI:$TAG
       - docker push $REPOSITORY_URI:latest
       - echo Writing image definitions...
-      - printf '[{"name":"container-name","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > imagedefinitions.json
+      - printf '[{"name":"my-actual-container-name","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > imagedefinitions.json
+
 
 artifacts:
   files:
