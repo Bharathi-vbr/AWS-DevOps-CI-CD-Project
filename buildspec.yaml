@@ -12,7 +12,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:$TAG ./aws-devops-project
+      - docker build -f Dockerfile -t $REPOSITORY_URI:$TAG ./aws-devops-project
       - docker tag $REPOSITORY_URI:$TAG $REPOSITORY_URI:latest
   post_build:
     commands:
