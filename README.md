@@ -1,6 +1,7 @@
 ## AWS CI-CD: React App on AWS ECS Fargate
 
-<img width="845" height="482" alt="Screenshot 2025-11-17 at 6 16 42 PM" src="https://github.com/user-attachments/assets/75fe2601-abe2-4f2c-8b5e-91824cde6d6c" />
+<img width="845" height="475" alt="Screenshot 2025-11-17 at 6 53 03 PM" src="https://github.com/user-attachments/assets/cdebd580-b4f2-4357-8d24-7b28978d60ae" />
+
 <img width="768" height="731" alt="Screenshot 2025-11-16 at 7 43 35 PM" src="https://github.com/user-attachments/assets/dfaff7c6-ef2c-48fe-b882-f19e3353ba46" />
 
 
@@ -14,6 +15,7 @@ This project demonstrates a full AWS DevOps CI/CD pipeline to build, containeriz
 - **AWS CodePipeline:** Automates build-to-deploy workflow.
 - **AWS ECS Fargate:** Runs containers serverlessly.
 - **CloudFormation:** Provisions all required resources via infrastructure-as-code.
+- **Amazon CloudWatch:** Monitors build, deployment, and application health. Logs pipeline activities and app metrics. 
 
 ## Pipeline Flow
 
@@ -23,6 +25,7 @@ This project demonstrates a full AWS DevOps CI/CD pipeline to build, containeriz
 4. **Build & Test:** AWS CodeBuild uses buildspec to build, test, and tag containers.
 5. **Deploy:** CodePipeline triggers deployment, pushing the container to ECS Fargate.
 6. **Infrastructure:** All resources and permissions created automatically via CloudFormation.
+7. **Monitor:** Amazon CloudWatch captures logs and metrics for pipeline, build, and runtime events
 
 ## Repository Structure
 
